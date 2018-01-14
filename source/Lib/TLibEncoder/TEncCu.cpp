@@ -3418,7 +3418,7 @@ Void TEncCu::xEncodeCU( TComDataCU* pcCU, UInt uiAbsPartIdx, UInt uiDepth )
   char filename[100];
   sprintf(filename, "PU_split_%d.txt",poc_num);
   pFile = fopen(filename,"at");
-  fprintf(pFile, "%d %d %d %d %d %d\n",pt1x,pt1y,pt2x,pt2y,pcCU->getPartitionSize(uiAbsPartIdx),pcCU->getPredictionMode(uiAbsPartIdx));
+  fprintf(pFile, "%d %d %d %d %d %d\n",pt1x,pt1y,pt2x,pt2y,0,pcCU->getPredictionMode(uiAbsPartIdx));
   fclose(pFile);
     
 #if JVET_C0024_QTBT
