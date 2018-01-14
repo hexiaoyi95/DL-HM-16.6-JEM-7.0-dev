@@ -131,6 +131,11 @@ double getPSNR(const cv::Mat& I1,const cv::Mat& I2)
   }
 }
 
+int round_double(double number)
+{
+  return (number > 0.0) ? (number + 0.5) : (number - 0.5);
+}
+
 #if JVET_D0033_ADAPTIVE_CLIPPING
 namespace {
 // simulate a coding decoding of the Intra(intrinsic) prms: to be sync with real encoding
@@ -325,7 +330,8 @@ Void TEncGOP::init ( TEncTop* pcTEncTop )
   m_pcRateCtrl           = pcTEncTop->getRateCtrl();
   m_lastBPSEI          = 0;
   m_totalCoded         = 0;
-  Int sliceQP = m_pcCfg->getQP();
+  Int sliceQP = m_pcCfg->getInitialQP();
+  printf("InitalQP: %d", sliceQP);
   Int source_width = m_pcCfg->getSourceWidth();
   Int source_height = m_pcCfg->getSourceHeight();
   char weights_file[100];
@@ -2321,7 +2327,11 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
       const Int   iHeight = pcPicD->getHeight(ch) - (m_pcEncTop->getPad(1) >> pcPic->getComponentScaleY(ch));
     
       Int   iSize   = iWidth * iHeight;
-      const Int maxval = 255 << (g_bitDepth[toChannelType(ch)] - 8);
+#if JVET_D0134_PSNR
+      const Int maxval = ( m_pcCfg->getTrueBitdepthPSNR() == true )?  (1 << pcPic->getPicSym()->getSPS().getBitDepth(toChannelType(ch))) - 1 : 255 << (pcPic->getPicSym()->getSPS().getBitDepth(toChannelType(ch)) - 8);
+#else
+      const Int maxval = 255 << (pcPic->getPicSym()->getSPS().getBitDepth(toChannelType(ch)) - 8);
+#endif
       float* pel_float = new float[iSize];
       float* label_float=new float[iSize];
       float* pred_float = new float[iSize];
@@ -2359,7 +2369,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
     
       Int source_width = m_pcCfg->getSourceWidth();
       Int source_height = m_pcCfg->getSourceHeight();
-      Int sliceQP = m_pcCfg->getQP();
+      Int sliceQP = m_pcCfg->getInitialQP();
     
   #ifdef UseCNN
   #ifdef CNN_in_loop
