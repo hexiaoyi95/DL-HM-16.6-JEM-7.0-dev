@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../../Downloads/HM-16.6-JEM-7.0-dev/build">
+   </FileRef>
+   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>
