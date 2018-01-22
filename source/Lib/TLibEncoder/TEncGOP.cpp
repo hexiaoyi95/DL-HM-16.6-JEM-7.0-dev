@@ -2356,15 +2356,15 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
       char filename[100];
       sprintf(filename,"%d_pred.bmp", num_poc);
       cv::Mat pred_uint8;
-      pred.convertTo(pred_uint8, CV_8UC1, 255);
+      pred.convertTo(pred_uint8, CV_8UC1, maxval);
       if(uv==0) imwrite(filename, pred_uint8);
       // sprintf(filename,"%d_input.bmp", num_poc);
       // cv::Mat input_uint8;
-      // input.convertTo(input_uint8, CV_8UC1, 255);
+      // input.convertTo(input_uint8, CV_8UC1, maxval);
       // if(uv==0) imwrite(filename, input_uint8);
       sprintf(filename,"%d_label.bmp", num_poc);
       cv::Mat label_uint8;
-      label.convertTo(label_uint8, CV_8UC1, 255);
+      label.convertTo(label_uint8, CV_8UC1, maxval);
       if(uv==0) imwrite(filename, label_uint8);
     
       Int source_width = m_pcCfg->getSourceWidth();
@@ -2563,7 +2563,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                 
                   sprintf(filename,"%d.bmp",num_poc);
                   cv::Mat output_img;
-                  output_final.convertTo(output_img, CV_8UC1,255);
+                  output_final.convertTo(output_img, CV_8UC1, maxval);
                   imwrite(filename,output_img);
                   in_psnr[chan]= getPSNR(output,label);
                   in_ssim[chan]=getMSSIM(output,label);
@@ -2585,7 +2585,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                 
   #ifdef USE_5X224
                   //-----5x224x224 and input image-------
-                  cv::Mat mean_ = cv::Mat(cv::Size(224,224),CV_32FC1,cv::Scalar(float(115)/255));
+                  cv::Mat mean_ = cv::Mat(cv::Size(224,224),CV_32FC1,cv::Scalar(float(115)/maxval));
                   vector<cv::Mat> input_images;
                   vector<cv::Mat> input_preds;
                   int r_x,r_y;
@@ -2768,7 +2768,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                     
                       sprintf(filename,"%d_output.bmp",num_poc);
                       cv::Mat img_uint8;
-                      final_output.convertTo(img_uint8,CV_8UC1,255);
+                      final_output.convertTo(img_uint8,CV_8UC1,maxval);
                       imwrite(filename,img_uint8);
                     
                   }
@@ -2847,7 +2847,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                     
                       sprintf(filename,"%d_output.bmp",num_poc);
                       cv::Mat img_uint8;
-                      output.convertTo(img_uint8,CV_8UC1,255);
+                      output.convertTo(img_uint8,CV_8UC1,maxval);
                       //imwrite(filename,img_uint8);
                   }
   #endif
@@ -2915,7 +2915,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                       if(j<0) r_index=0;
                       if(i>iWidth-1) l_index=iWidth-1;
                       if(j>iHeight-1) r_index=iHeight-1;
-                      heatmap.at<float>(r_index,l_index) = ( 16 * patch_size / (by - ty) - 1 ) / 255.0 ;
+                      heatmap.at<float>(r_index,l_index) = ( 16 * patch_size / (by - ty) - 1 ) / (maxval*1.) ;
                     }
                   }
                 }
@@ -3047,7 +3047,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
           {
               sprintf(filename,"%d.bmp",num_poc);
               cv::Mat img_uint8;
-              input.convertTo(img_uint8,CV_8UC1,255);
+              input.convertTo(img_uint8,CV_8UC1,maxval);
               imwrite(filename,img_uint8);
           }
     
