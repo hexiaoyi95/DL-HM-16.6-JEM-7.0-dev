@@ -422,7 +422,7 @@ Void TEncGOP::init ( TEncTop* pcTEncTop )
   m_nvt = new NDArrayConverter();
   PyObject *pModule, *pName, *pFunc;
   PyRun_SimpleString("import sys");
-  PyRun_SimpleString("sys.path.append(\"/home/l301/HM-16.0/\")");
+  PyRun_SimpleString("sys.path.append(\"/home/l301/DL-HM-16.6-JEM-7.0-dev/\")");
   pName = PyString_FromString("python_forward");
   pModule = PyImport_Import(pName);
   if ( pModule != NULL ){
@@ -2375,7 +2375,7 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
   #ifdef CNN_in_loop
       if(num_poc !=0 )
   #else
-          if( num_poc!=0 )
+      if( num_poc!=0 )
   #endif
           {
               char weights_file[100];
@@ -2862,7 +2862,6 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                 int patch_size = 64;
                 cout << patch_size << endl;
                 cout << "processing patch by patch " << patch_size << "*" << patch_size <<endl;
-                cv::Mat mean_ = cv::Mat(cv::Size(224,224),CV_8UC1,cv::Scalar(115));
                 int plus_count = 0;
                 //case 1
                 // for(int i=0; i<iHeight; i++){
@@ -2902,23 +2901,33 @@ Void TEncGOP::compressGOP( Int iPOCLast, Int iNumPicRcvd, TComList<TComPic*>& rc
                 
                 // }
                 //case 2
+              //  while(getline(in,line))
+              //  {
+              //    istringstream is(line);
+              //    int lx,rx,ty,by,partSize,preMode;
+              //    is >> lx >> ty>> rx >> by >> partSize >> preMode;
+              //    for (int i=lx; i<=rx; i++){
+              //      for (int j=ty; j<=by; j++){
+              //        int r_index = j;
+              //        int l_index = i;
+              //        if(i<0) l_index=0;
+              //        if(j<0) r_index=0;
+              //        if(i>iWidth-1) l_index=iWidth-1;
+              //        if(j>iHeight-1) r_index=iHeight-1;
+              //        heatmap.at<float>(r_index,l_index) = ( 16 * patch_size / (by - ty) - 1 ) / (maxval*1.) ;
+              //      }
+              //    }
+              //  }
+                //case 3
                 while(getline(in,line))
                 {
-                  istringstream is(line);
-                  int lx,rx,ty,by,partSize,preMode;
-                  is >> lx >> ty>> rx >> by >> partSize >> preMode;
-                  for (int i=lx; i<=rx; i++){
-                    for (int j=ty; j<=by; j++){
-                      int r_index = j;
-                      int l_index = i;
-                      if(i<0) l_index=0;
-                      if(j<0) r_index=0;
-                      if(i>iWidth-1) l_index=iWidth-1;
-                      if(j>iHeight-1) r_index=iHeight-1;
-                      heatmap.at<float>(r_index,l_index) = ( 16 * patch_size / (by - ty) - 1 ) / (maxval*1.) ;
-                    }
-                  }
+                    istringstream is(line);
+                    int lx,rx,ty,by,partSize,preMode;
+                    is >> lx >> ty >> rx >> by >> partSize >> preMode;
+                    cv::Scalar mean_scalar = cv::mean(input(cv::Rect(lx, ty, rx-lx+1, by-ty+1)));
+                    heatmap(cv::Rect(lx, ty, rx-lx+1, by-ty+1)).setTo(mean_scalar);
                 }
+
                 
                 for( int ly = 0; ly < iHeight - patch_size -1; ly += patch_size){
                   for( int lx = 0; lx < iWidth - patch_size -1; lx += patch_size){

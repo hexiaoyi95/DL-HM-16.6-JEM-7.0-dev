@@ -13,8 +13,8 @@ SRC_DIR3		=
 SRC_DIR4		=
 
 
-USER_INC_DIRS	= -I$(SRC_DIR)
-USER_LIB_DIRS	=
+USER_INC_DIRS	= -I$(SRC_DIR) -I/home/l301/mxnet/include -I/home/l301/resnet-caffe/caffe/include -I/usr/local/cuda-8.0/include -I/usr/include/python2.7 -I/usr/include/x86_64-linux-gnu/python2.7
+USER_LIB_DIRS	= -L/home/l301/resnet-caffe/caffe/build/lib -L/home/l301/mxnet/lib -L/usr/lib/python2.7/config-x86_64-linux-gnu
 
 ifeq ($(HIGHBITDEPTH), 1)
 HBD=HighBitDepth
@@ -58,6 +58,8 @@ OBJS          	= \
 			$(OBJ_DIR)/WeightPredAnalysis.o \
 			$(OBJ_DIR)/TEncRateCtrl.o \
 			$(OBJ_DIR)/TEncAdaptiveLoopFilter.o \
+            $(OBJ_DIR)/cnn.o \
+            $(OBJ_DIR)/conversion.o \
 
 LIBS				= -lpthread
 

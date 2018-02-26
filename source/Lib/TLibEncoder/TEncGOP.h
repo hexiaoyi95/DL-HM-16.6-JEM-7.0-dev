@@ -68,7 +68,7 @@
 #ifndef __CNN__
 #define __CNN__
 #include "cnn.h"
-//#include <mxnet/c_predict_api.h>
+#include <mxnet/c_predict_api.h>
 #endif
 #include <Python.h>
 #include "conversion.h"
@@ -77,7 +77,7 @@
 #define CAFFE 0
 #define PYTHON_API 1
 //#define USE_5X224
-#define CNN_in_loop
+//#define CNN_in_loop
 //#define block_filter
 
 //! \ingroup TLibEncoder
@@ -162,7 +162,6 @@ private:
 #if MXNET
   PredictorHandle*         pred_hnd;
 #endif
-  cv::Mat                  lastYRec;
 #if CAFFE
   CNN*                     VRCNN;
   CNN*                     VGG;

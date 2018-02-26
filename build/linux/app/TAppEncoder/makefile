@@ -12,8 +12,8 @@ SRC_DIR2		=
 SRC_DIR3		=
 SRC_DIR4		=
 
-USER_INC_DIRS	= -I$(SRC_DIR)
-USER_LIB_DIRS	=
+USER_INC_DIRS	= -I$(SRC_DIR) -I/home/l301/mxnet/include -I/home/l301/resnet-caffe/caffe/include -I/usr/local/cuda-8.0/include -I/usr/include/python2.7 -I/usr/include/x86_64-linux-gnu/python2.7
+USER_LIB_DIRS	= -L/home/l301/resnet-caffe/caffe/build/lib -L/home/l301/mxnet/lib -L/home/l301/tensorflow/lib/python2.7/
 
 ifeq ($(HIGHBITDEPTH), 1)
 HBD=HighBitDepth
@@ -25,7 +25,7 @@ endif
 OBJ_DIR				= ./objects$(HBD)
 
 # set executable name
-PRJ_NAME			= TAppEncoder$(HBD)
+PRJ_NAME			= TAppEncoderPythonApiHM3Outloop$(HBD)
 
 # defines to set
 DEFS				= -DMSYS_LINUX -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DMSYS_UNIX_LARGEFILE
@@ -45,15 +45,16 @@ RELEASE_LIBS		=
 STAT_LIBS			= -lpthread
 DYN_LIBS			=
 
-
-DYN_DEBUG_LIBS		= -lTLibEncoder$(HBD)d -lTLibCommon$(HBD)d -lTLibVideoIO$(HBD)d -lTAppCommon$(HBD)d
+DYN_DEBUG_LIBS		= -lTLibEncoder$(HBD)d -lTLibCommon$(HBD)d -lTLibVideoIO$(HBD)d -lTAppCommon$(HBD)d -lcaffe -lmxnet  -lboost_system `pkg-config --libs opencv --libs libglog` -lpython2.7
 DYN_DEBUG_PREREQS		= $(LIB_DIR)/libTLibEncoder$(HBD)d.a $(LIB_DIR)/libTLibCommon$(HBD)d.a $(LIB_DIR)/libTLibVideoIO$(HBD)d.a $(LIB_DIR)/libTAppCommon$(HBD)d.a
-STAT_DEBUG_LIBS		= -lTLibEncoder$(HBD)Staticd -lTLibCommon$(HBD)Staticd -lTLibVideoIO$(HBD)Staticd -lTAppCommon$(HBD)Staticd
+STAT_DEBUG_LIBS		= -lTLibEncoder$(HBD)Staticd -lTLibCommon$(HBD)Staticd -lTLibVideoIO$(HBD)Staticd -lTAppCommon$(HBD)Staticd -lcaffe -lmxnet -lboost_system `pkg-config --libs opencv --libs libglog` -lpython2.7
+
 STAT_DEBUG_PREREQS		= $(LIB_DIR)/libTLibEncoder$(HBD)Staticd.a $(LIB_DIR)/libTLibCommon$(HBD)Staticd.a $(LIB_DIR)/libTLibVideoIO$(HBD)Staticd.a $(LIB_DIR)/libTAppCommon$(HBD)Staticd.a
 
-DYN_RELEASE_LIBS	= -lTLibEncoder$(HBD) -lTLibCommon$(HBD) -lTLibVideoIO$(HBD) -lTAppCommon$(HBD)
+DYN_RELEASE_LIBS	= -lTLibEncoder$(HBD) -lTLibCommon$(HBD) -lTLibVideoIO$(HBD) -lTAppCommon$(HBD) -lcaffe -lmxnet -lboost_system `pkg-config --libs opencv --libs libglog` -lpython2.7
+
 DYN_RELEASE_PREREQS	= $(LIB_DIR)/libTLibEncoder$(HBD).a $(LIB_DIR)/libTLibCommon$(HBD).a $(LIB_DIR)/libTLibVideoIO$(HBD).a $(LIB_DIR)/libTAppCommon$(HBD).a
-STAT_RELEASE_LIBS	= -lTLibEncoder$(HBD)Static -lTLibCommon$(HBD)Static -lTLibVideoIO$(HBD)Static -lTAppCommon$(HBD)Static
+STAT_RELEASE_LIBS	= -lTLibEncoder$(HBD)Static -lTLibCommon$(HBD)Static -lTLibVideoIO$(HBD)Static -lTAppCommon$(HBD)Static -lcaffe -lmxnet -lboost_system `pkg-config --libs opencv --libs libglog` -lpython2.7
 STAT_RELEASE_PREREQS	= $(LIB_DIR)/libTLibEncoder$(HBD)Static.a $(LIB_DIR)/libTLibCommon$(HBD)Static.a $(LIB_DIR)/libTLibVideoIO$(HBD)Static.a $(LIB_DIR)/libTAppCommon$(HBD)Static.a
 
 
